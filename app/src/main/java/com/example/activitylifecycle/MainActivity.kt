@@ -20,10 +20,10 @@ class MainActivity : AppCompatActivity() {
             if (!inputText.isNullOrBlank()) {
                 val time = inputText.toInt()
                 val intent = Intent(this, TimerActivity::class.java)
-                intent.putExtra(Action.TIME.name, time)
+                intent.putExtra(Argument.TIME.name, time)
                 startActivity(intent)
             } else {
-                Toast.makeText(this, "Put time to timer", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Put time to the timer", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    enum class Action {
+    enum class Argument {
         TIME
     }
 }
