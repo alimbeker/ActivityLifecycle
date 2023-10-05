@@ -13,7 +13,7 @@
             android:id="@+id/name_input_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/input_your_name"
+            android:hint="@string/input"
             android:inputType="textCapSentences|textPersonName"
             android:textColor="@color/black"
             android:textColorHint="@color/purple_200"
@@ -34,34 +34,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
-        android:text="@string/take_picture"
+        android:text="@string/send_text"
         android:textAllCaps="true"
         android:textColor="@color/white" />
 
-    <ImageView
-        android:id="@+id/new_image_view"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:layout_gravity="center"
-        android:layout_marginTop="16dp"
-        android:scaleType="centerCrop"
-        android:visibility="gone" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/open_browser_btn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:text="@string/open_browser"
-        android:textAllCaps="true"
-        android:textColor="@color/white" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/send_btn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:text="Send text"
-        android:textAllCaps="true"
-        android:textColor="@color/white" />
 </LinearLayout>
