@@ -16,9 +16,9 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.sayHelloBtn.setOnClickListener {
-            val inputText = binding.timeForTimer.text.toString()
-            if (!inputText.isNullOrBlank()) {
-                val time = inputText.toInt()
+            val inputTime = binding.timeForTimer.text.toString()
+            if (inputTime.isNotEmpty()) {
+                val time = inputTime.toInt()
                 val intent = Intent(this, TimerActivity::class.java)
                 intent.putExtra(Argument.TIME.name, time)
                 startActivity(intent)
@@ -29,14 +29,17 @@ class MainActivity : AppCompatActivity() {
 
 
         binding.sendBtn.setOnClickListener {
-            val time = binding.timeForTimer.text.toString()
+            val inputTime = binding.timeForTimer.text.toString()
+            if (!inputTime.isNullOrEmpty()) {
+                val sendIntent = Intent()
+                sendIntent.action = Intent.ACTION_SEND
+                sendIntent.putExtra(Intent.EXTRA_TEXT, inputTime)
+                sendIntent.type = "text/plain"
 
-            val sendIntent = Intent()
-            sendIntent.action = Intent.ACTION_SEND
-            sendIntent.putExtra(Intent.EXTRA_TEXT, time)
-            sendIntent.type = "text/plain"
-
-            startActivity(Intent.createChooser(sendIntent, "Send Number"))
+                startActivity(Intent.createChooser(sendIntent, "Send Number"))
+            } else {
+                Toast.makeText(this, "Put time to the timer", Toast.LENGTH_SHORT).show()
+            }
         }
 
 

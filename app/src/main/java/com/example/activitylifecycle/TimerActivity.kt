@@ -46,10 +46,8 @@ class TimerActivity : AppCompatActivity() {
         // ACTION_SEND
         if (Intent.ACTION_SEND == intent.action) {
             val time = intent.getStringExtra(Intent.EXTRA_TEXT)
+                timer(time!!.toInt())
 
-            if (time != null) {
-                timer(time.toInt())
-            }
         }
 
     }
