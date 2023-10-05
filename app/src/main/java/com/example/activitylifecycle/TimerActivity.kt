@@ -22,6 +22,7 @@ class TimerActivity : AppCompatActivity() {
 
 
         val time = intent.getIntExtra(Argument.TIME.name, 0)
+        binding.textView.text = toMinutes(time.toLong())
         timer(time)
 
 
@@ -46,7 +47,8 @@ class TimerActivity : AppCompatActivity() {
         // ACTION_SEND
         if (Intent.ACTION_SEND == intent.action) {
             val time = intent.getStringExtra(Intent.EXTRA_TEXT)
-                timer(time!!.toInt())
+            binding.textView.text = toMinutes(time!!.toLong())
+            timer(time!!.toInt())
 
         }
 
@@ -73,17 +75,22 @@ class TimerActivity : AppCompatActivity() {
         countdownTimer = object : CountDownTimer((time * 1000).toLong(), 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 val totalSeconds = millisUntilFinished / 1000
-                val minutes = totalSeconds / 60
-                val seconds = totalSeconds % 60
 
-                val formattedTime = String.format("%02d:%02d", minutes, seconds)
-                binding.textView.text = formattedTime
+                binding.textView.text = toMinutes(totalSeconds)
             }
 
             override fun onFinish() {
                 binding.textView.text = "00:00"
             }
         }
+    }
+    private fun toMinutes(totalSeconds: Long) : String {
+        val minutes = totalSeconds / 60
+        val seconds = totalSeconds % 60
+
+        val formattedTime = String.format("%02d:%02d", minutes, seconds)
+
+        return formattedTime
     }
 }
 enum class Argument {
