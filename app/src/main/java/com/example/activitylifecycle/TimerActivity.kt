@@ -35,7 +35,7 @@ class TimerActivity : AppCompatActivity() {
         if (Intent.ACTION_SEND == intent.action) {
             val time = intent.getStringExtra(Intent.EXTRA_TEXT)
             binding.textView.text = toMinutes(time!!.toLong())
-
+            seconds = time!!.toLong()
 
         }
 
