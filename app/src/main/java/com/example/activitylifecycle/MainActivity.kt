@@ -18,7 +18,7 @@ class MainActivity : AppCompatActivity() {
         binding.sayHelloBtn.setOnClickListener {
             val inputTime = binding.timeForTimer.text.toString()
             if (inputTime.isNotEmpty()) {
-                val time = inputTime.toInt()
+                val time = inputTime.toLong()
                 val intent = Intent(this, TimerActivity::class.java)
                 intent.putExtra(Argument.TIME.name, time)
                 startActivity(intent)
