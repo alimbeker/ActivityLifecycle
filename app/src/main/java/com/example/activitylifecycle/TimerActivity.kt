@@ -6,6 +6,7 @@ import android.os.CountDownTimer
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.activitylifecycle.databinding.ActivityTimerBinding
+import javax.sql.StatementEvent
 
 
 class TimerActivity : AppCompatActivity() {
@@ -13,6 +14,7 @@ class TimerActivity : AppCompatActivity() {
     private lateinit var binding: ActivityTimerBinding
     private var seconds: Long = 0
     private var running: Boolean = false
+    private var wasRunning: Boolean = false
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,7 +35,7 @@ class TimerActivity : AppCompatActivity() {
         if (Intent.ACTION_SEND == intent.action) {
             val time = intent.getStringExtra(Intent.EXTRA_TEXT)
             binding.textView.text = toMinutes(time!!.toLong())
-            runTimer(time!!.toLong())
+
 
         }
 
@@ -57,9 +59,14 @@ class TimerActivity : AppCompatActivity() {
                 //if no null code is working
         savedInstanceState?.let {
             seconds = it.getLong(State.SECONDS.name)
+            running = it.getBoolean(State.RUNNING.name)
+            wasRunning = it.getBoolean(State.WASRUNNING.name)
             binding.textView.text = toMinutes(seconds)
         }
 
+        if(running) {
+            runTimer(seconds)
+        }
 
 
 
@@ -97,6 +104,8 @@ class TimerActivity : AppCompatActivity() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         outState.putLong(State.SECONDS.name,seconds)
+        outState.putBoolean(State.RUNNING.name, running)
+        outState.putBoolean(State.WASRUNNING.name, running)
         super.onSaveInstanceState(outState)
     }
 
@@ -119,13 +128,38 @@ class TimerActivity : AppCompatActivity() {
     }
 
 
+    override fun onStart() {
+        super.onStart()
+    }
 
+    override fun onResume() {
+        running = wasRunning
+        super.onResume()
+    }
+
+    override fun onPause() {
+        running = false
+        super.onPause()
+    }
+
+    override fun onStop() {
+        running = false
+        super.onStop()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+    }
+    //When we come back from background, onRestart() called
+    override fun onRestart() {
+        super.onRestart()
+    }
 
 
 }
 
 enum class State {
-    SECONDS
+    SECONDS, RUNNING, WASRUNNING
 }
 enum class Argument {
     TIME
