@@ -11,7 +11,8 @@ import com.example.activitylifecycle.databinding.ActivityTimerBinding
 class TimerActivity : AppCompatActivity() {
     private var countdownTimer: CountDownTimer? = null
     private lateinit var binding: ActivityTimerBinding
-    private var running:Boolean = false
+    private var seconds: Long = 0
+    private var running: Boolean = false
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,10 +23,19 @@ class TimerActivity : AppCompatActivity() {
 
 
 
-        val time = intent.getIntExtra(Argument.TIME.name, 0)
-        binding.textView.text = toMinutes(time.toLong())
-        runTimer(time)
+        seconds = intent.getLongExtra(Argument.TIME.name, 0)
+        binding.textView.text = toMinutes(seconds)
 
+
+
+
+        // ACTION_SEND
+        if (Intent.ACTION_SEND == intent.action) {
+            val time = intent.getStringExtra(Intent.EXTRA_TEXT)
+            binding.textView.text = toMinutes(time!!.toLong())
+            runTimer(time!!.toLong())
+
+        }
 
 
         with(binding) {
@@ -44,48 +54,38 @@ class TimerActivity : AppCompatActivity() {
         }
 
 
-
-        // ACTION_SEND
-        if (Intent.ACTION_SEND == intent.action) {
-            val time = intent.getStringExtra(Intent.EXTRA_TEXT)
-            binding.textView.text = toMinutes(time!!.toLong())
-            runTimer(time!!.toInt())
-
+                //if no null code is working
+        savedInstanceState?.let {
+            seconds = it.getLong(State.SECONDS.name)
+            binding.textView.text = toMinutes(seconds)
         }
 
-    }
 
 
-    private fun startTimer() {
-        countdownTimer?.start()
-    }
 
-    private fun pauseTimer() {
-        countdownTimer?.cancel()
-    }
-
-    private fun resetTimer() {
-        countdownTimer?.cancel()
-        binding.textView.text = "00:00"
     }
 
 
 
+    private fun runTimer(time : Long) {
 
-    private fun runTimer(time : Int) {
-        countdownTimer = object : CountDownTimer((time * 1000).toLong(), 1000) {
+        countdownTimer = object : CountDownTimer((time * 1000), 1000) {
+
             override fun onTick(millisUntilFinished: Long) {
 
-                val totalSeconds = millisUntilFinished / 1000
+                binding.textView.text = toMinutes(millisUntilFinished / 1000)
+                seconds--
 
-                binding.textView.text = toMinutes(totalSeconds)
             }
 
             override fun onFinish() {
-                binding.textView.text = "00:00"
+                running = false
+                seconds = 0
             }
-        }
+        }.start()
     }
+
+
     private fun toMinutes(totalSeconds: Long) : String {
         val minutes = totalSeconds / 60
         val seconds = totalSeconds % 60
@@ -94,6 +94,38 @@ class TimerActivity : AppCompatActivity() {
 
         return formattedTime
     }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.putLong(State.SECONDS.name,seconds)
+        super.onSaveInstanceState(outState)
+    }
+
+
+    private fun startTimer() {
+        running = true
+        runTimer(seconds)
+    }
+
+    private fun pauseTimer() {
+        running = false
+        countdownTimer?.cancel()
+    }
+
+    private fun resetTimer() {
+        running = false
+        countdownTimer?.cancel()
+        seconds = 0
+        binding.textView.text = "00:00"
+    }
+
+
+
+
+
+}
+
+enum class State {
+    SECONDS
 }
 enum class Argument {
     TIME
