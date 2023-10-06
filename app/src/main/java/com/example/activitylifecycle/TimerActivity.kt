@@ -23,7 +23,7 @@ class TimerActivity : AppCompatActivity() {
 
         val time = intent.getIntExtra(Argument.TIME.name, 0)
         binding.textView.text = toMinutes(time.toLong())
-        timer(time)
+        runTimer(time)
 
 
 
@@ -47,8 +47,8 @@ class TimerActivity : AppCompatActivity() {
         // ACTION_SEND
         if (Intent.ACTION_SEND == intent.action) {
             val time = intent.getStringExtra(Intent.EXTRA_TEXT)
-            binding.textView.text = toMinutes(time!!.toLong())
-            timer(time!!.toInt())
+            binding.textView.text = toMinutes(time!r!.toLong())
+            runTimer(time!!.toInt())
 
         }
 
@@ -71,7 +71,7 @@ class TimerActivity : AppCompatActivity() {
 
 
 
-    private fun timer(time : Int) {
+    private fun runTimer(time : Int) {
         countdownTimer = object : CountDownTimer((time * 1000).toLong(), 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 val totalSeconds = millisUntilFinished / 1000
