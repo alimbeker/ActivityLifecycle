@@ -3,6 +3,7 @@ package com.example.activitylifecycle
 import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.activitylifecycle.databinding.ActivityTimerBinding
@@ -40,16 +41,29 @@ class TimerActivity : AppCompatActivity() {
         }
 
 
+
         with(binding) {
             startButton.setOnClickListener {
-                startTimer()
+                if (startButton.isEnabled) {
+                    startButton.isEnabled = false
+                    startTimer()
+                } else {
+                    Toast.makeText(
+                        this@TimerActivity,
+                        "You have already started the timer",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             }
 
+
             pauseButton.setOnClickListener {
+                startButton.isEnabled = true
                 pauseTimer()
             }
 
             resetButton.setOnClickListener {
+                startButton.isEnabled = true
                 resetTimer()
             }
 
@@ -139,11 +153,15 @@ class TimerActivity : AppCompatActivity() {
 
     override fun onPause() {
         running = false
+        binding.startButton.isEnabled = true
+        countdownTimer?.cancel()
         super.onPause()
     }
 
     override fun onStop() {
         running = false
+        binding.startButton.isEnabled = true
+        countdownTimer?.cancel()
         super.onStop()
     }
 
