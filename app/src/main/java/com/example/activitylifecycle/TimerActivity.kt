@@ -11,6 +11,7 @@ import com.example.activitylifecycle.databinding.ActivityTimerBinding
 class TimerActivity : AppCompatActivity() {
     private var countdownTimer: CountDownTimer? = null
     private lateinit var binding: ActivityTimerBinding
+    private var running:Boolean = false
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,7 +48,7 @@ class TimerActivity : AppCompatActivity() {
         // ACTION_SEND
         if (Intent.ACTION_SEND == intent.action) {
             val time = intent.getStringExtra(Intent.EXTRA_TEXT)
-            binding.textView.text = toMinutes(time!r!.toLong())
+            binding.textView.text = toMinutes(time!!.toLong())
             runTimer(time!!.toInt())
 
         }
@@ -74,6 +75,7 @@ class TimerActivity : AppCompatActivity() {
     private fun runTimer(time : Int) {
         countdownTimer = object : CountDownTimer((time * 1000).toLong(), 1000) {
             override fun onTick(millisUntilFinished: Long) {
+
                 val totalSeconds = millisUntilFinished / 1000
 
                 binding.textView.text = toMinutes(totalSeconds)
